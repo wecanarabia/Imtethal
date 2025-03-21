@@ -1,0 +1,28 @@
+<?php
+
+return[
+    'NAME' => 'الاسم',
+    'EMAIL' => 'البريد الالكتروني',
+    'PASSWORD' => 'كلمة المرور',
+    'ADMINS' => 'المسؤولين',
+    'ADMIN' => 'المسؤول',
+    'COMPANIES' => 'الشركات',
+    'COMPANY' => 'الشركة',
+    'NOTIFICATION_TYPE' => 'نوع الإشعار',
+    'WHATSAPP' => 'واتساب',
+    'BOTH' => 'كلاهما',
+    'COMPANY_INFORMATION' => 'معلومات الشركة',
+    'PHONE' => 'الهاتف',
+    'TYPE' => 'النوع',
+    'JOB_TITLE' => 'الوظيفة',
+    'PERFORMANCE_EVALUATION' => 'تقييم الأداء',
+    'USER' => 'المستخدم',
+    'USERS' => 'المستخدمين',
+    'COMPANY_DETAILS' => 'تفاصيل الشركة',
+    'ADMIN_DETAILS' => 'تفاصيل المسؤول',
+    'PERFORMANCE_EVALUATION' => 'تقييم الأداء',
+    'DESCRIPTION' => 'الوصف',
+    '' => '',
+    '' => '',
+    '' => '',
+];
