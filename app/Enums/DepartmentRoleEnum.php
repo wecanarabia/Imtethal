@@ -4,16 +4,18 @@ namespace App\Enums;
 
 use Filament\Support\Contracts\HasLabel;
 
-enum UserTypeEnum:string implements HasLabel
+enum DepartmentRoleEnum:string implements HasLabel
 {
-    case USER = 'user';
+    case HEAD_OF_DEPARTMENT = 'head_of_department';
     case ADMIN = 'admin';
+    case EMPLOYEE = 'employee';
 
     public function getLabel(): string
     {
         return match ($this) {
-            self::USER => __('views.USER'),
+            self::HEAD_OF_DEPARTMENT => __('views.HEAD_OF_DEPARTMENT'),
             self::ADMIN => __('views.AN_ADMIN'),
+            self::EMPLOYEE => __('views.EMPLOYEE'),
         };
     }
 
@@ -24,7 +26,4 @@ enum UserTypeEnum:string implements HasLabel
             array_map(fn($case) => $case->getLabel(), self::cases())
         );
     }
-
 }
-
-

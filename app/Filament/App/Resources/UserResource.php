@@ -2,23 +2,41 @@
 
 namespace App\Filament\App\Resources;
 
-use App\Enums\UserTypeEnum;
-use App\Filament\App\Resources\UserResource\Pages;
-use App\Filament\App\Resources\UserResource\RelationManagers;
-use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\User;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Enums\UserTypeEnum;
+use Filament\Facades\Filament;
+use Filament\Resources\Resource;
+use App\Enums\DepartmentRoleEnum;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Repeater;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\App\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\App\Resources\UserResource\RelationManagers;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
-class UserResource extends Resource
+class UserResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'delete',
+            'delete_any',
+        ];
+    }
+
 
     public static function getPluralLabel(): string
     {
@@ -136,6 +154,26 @@ class UserResource extends Resource
                 ->label(__('views.JOB_TITLE'))
                 ->maxLength(255)
                 ->required(),
+            $panel != 'admin'?
+            Repeater::make('departments')
+                ->label(__('views.DEPARTMENTS'))
+                ->relationship('departments')
+                ->columns(2)
+                ->collapsible()
+                ->columnSpanFull()
+                ->schema([
+                    Select::make('department_id')
+                        ->label(__('views.DEPARTMENT'))
+                        ->columnSpan(1)
+                        ->options(\App\Models\Department::query()->where('company_id', Filament::getTenant()->id)->pluck('name', 'id')->toArray())
+                        ->required(),
+                    Select::make('department_role')
+                        ->label(__('views.DEPARTMENT_ROLE'))
+                        ->columnSpan(1)     
+                        ->options(DepartmentRoleEnum::labels())         
+                        ->required(),   
+                ])
+            :''
         ];
     }
 }

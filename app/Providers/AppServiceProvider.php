@@ -26,5 +26,7 @@ class AppServiceProvider extends ServiceProvider
                 ->locales(['ar','en']); // also accepts a closure
         });
         Gate::policy(\App\Models\Role::class, \App\Policies\RolePolicy::class);
+        Gate::policy(\App\Models\User::class, \App\Policies\UserPolicy::class);
+        Gate::policy(\App\Models\Department::class, \App\Policies\DepartmentPolicy::class);
     }
 }
