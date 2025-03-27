@@ -79,7 +79,7 @@ class TaskResource extends Resource implements HasShieldPermissions
                 Forms\Components\TextInput::make('task_repetition')
                     ->required()
                     ->label(__('views.TASK_REPETITION_IN_DAYS'))
-                    ->visible(fn($get) => $get('task_type') != TaskTypeEnum::NONE_RECURRING->value)
+                    ->visible(fn(Forms\Get $get) => $get('task_type') != TaskTypeEnum::NONE_RECURRING->value)
                     ->default(0)
                     ->numeric(),
                 Forms\Components\Hidden::make('company_id')
@@ -133,7 +133,7 @@ class TaskResource extends Resource implements HasShieldPermissions
 
                         Select::make('assigneeable_id')
                             ->label(__('views.ASSIGNEE'))
-                            ->options(fn (callable $get) => match ($get('assigneeable_type')) {
+                            ->options(fn (Forms\Get $get) => match ($get('assigneeable_type')) {
                                 User::class => User::where('company_id', Filament::getTenant()->id)->pluck('name', 'id'),
                                 Department::class => Department::where('company_id', Filament::getTenant()->id)->pluck('name', 'id'),
                                 default => [],
