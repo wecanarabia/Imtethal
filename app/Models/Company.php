@@ -30,6 +30,13 @@ class Company extends Model
         return $this->hasMany(\App\Models\User::class);
     }
 
+    public function tasks()
+    {
+        return $this->hasMany(\App\Models\Task::class);
+    }
+
+
+
 
     public static function boot()
     {
