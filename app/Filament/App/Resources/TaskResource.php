@@ -143,17 +143,17 @@ class TaskResource extends Resource implements HasShieldPermissions
                     ]),
 
                     Repeater::make('files')
-                    ->relationship('files')
-                    ->label(__('views.FILES'))
-                    ->addActionLabel(__('views.ADD_FILE'))
-                    ->required()
-                    ->columnSpanFull()
-                    ->collapsible()
-                    ->default([])
-                    ->schema([
-                        Static::fileInput(config('constants.TASK_FILE_DIR'))
-                            ->required(),
-                    ]),
+                        ->relationship('files')
+                        ->label(__('views.FILES'))
+                        ->addActionLabel(__('views.ADD_FILE'))
+                        ->nullable()
+                        ->columnSpanFull()
+                        ->collapsible()
+                        ->default([])
+                        ->schema([
+                            Static::fileInput(config('constants.TASK_FILE_DIR'))
+                                ->required(),
+                        ]),
             ]);
     }
 
