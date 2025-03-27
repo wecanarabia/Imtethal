@@ -82,7 +82,7 @@ class TaskResource extends Resource implements HasShieldPermissions
                     ->visible(fn($get) => $get('task_type') != TaskTypeEnum::NONE_RECURRING->value)
                     ->default(0)
                     ->numeric(),
-                Forms\Components\HIDDEN::make('company_id')
+                Forms\Components\Hidden::make('company_id')
                     ->default(Filament::getTenant()->id),
                 Forms\Components\Textarea::make('note')
                     ->nullable()
