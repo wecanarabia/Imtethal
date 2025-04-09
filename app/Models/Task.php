@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TaskStatusEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
@@ -10,17 +11,12 @@ class Task extends Model
         'name',
         'description',
         'priority',
-        'delivery_status',
         'task_repetition',
         'task_type',
         'company_id',
         'note',
-        'delivery_time',
-        'grace_end_time',
-        'task_evaluation',
         'delay_puneshment',
         'priority',
-        'status',
     ];
 
     public function team()
@@ -35,6 +31,48 @@ class Task extends Model
 
     public function assignees()
     {
-        return $this->hasMany(Assignee::class);
+        return $this->hasMany(Assignee::class, 'task_id');
     }
+
+    public function deliveries()
+    {
+        return $this->hasMany(TaskDelivery::class, 'task_id', 'id');
+    }
+
+    public function deliveryStatus(string $status)
+    {
+        return $this->hasMany(TaskDelivery::class, 'task_id', 'id')
+            ->when($status === 'incomplete', function ($query) {
+                $query->whereIn('status', [
+                    TaskStatusEnum::PENDING->value,
+                    TaskStatusEnum::IN_PROGRESS->value,
+                    TaskStatusEnum::OVERDUE->value,
+                ]);
+            })
+            ->when($status === 'complete', function ($query) {
+                $query->where('status', TaskStatusEnum::COMPLETED->value);
+            })
+            ->when($status === 'rejected/canceled', function ($query) {
+                $query->whereIn('status', [
+                    TaskStatusEnum::REJECTED->value,
+                    TaskStatusEnum::CANCELED->value,
+                ]);
+            });
+    }
+    public function incompletedDeliveries()
+    {
+        return $this->deliveryStatus('incomplete');
+    }
+
+    public function completedDeliveries()
+    {
+        return $this->deliveryStatus('complete');
+    }
+
+    public function refusedDeliveries()
+    {
+        return $this->deliveryStatus('rejected/canceled');
+    }
+
+
 }

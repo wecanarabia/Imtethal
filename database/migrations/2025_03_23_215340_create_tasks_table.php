@@ -19,17 +19,11 @@ return new class extends Migration
             $table->string('name');
 			$table->text('description')->nullable();
 			$table->string('task_type')->default(TaskTypeEnum::RECURRING->value);
-			$table->string('delivery_status')->nullable();
-			$table->integer('task_repetition');
+			$table->integer('task_repetition')->default(0);
             $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
 			$table->string('note')->nullable();
-			$table->datetime('delivery_time')->nullable();
-			$table->datetime('grace_end_time')->nullable();
-			$table->integer('task_evaluation')->default(0);
 			$table->string('priority')->default(PriorityEnum::HIGH->value);
 			$table->text('delay_puneshment')->nullable();
-			$table->string('status')->default(TaskStatusEnum::PENDING->value);
-
             $table->timestamps();
         });
     }
