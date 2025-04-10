@@ -34,6 +34,7 @@ class AdminPanelProvider extends PanelProvider
             ->authGuard('admin')
             ->login()
             ->spa()
+            ->brandLogo(fn () => view('components.custom.logo-title'))
             ->userMenuItems([
                 'profile' => MenuItem::make()
                     ->label(fn() => auth()->user()->name)
@@ -63,6 +64,7 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+            // ->viteTheme('resources/css/filament.css')
             ->authMiddleware([
                 Authenticate::class,
             ]);

@@ -67,7 +67,7 @@ return[
     'ADD_DELIVERY' => 'Add Delivery',
     'CALENDER' => 'Calender',
     'TASK_CALENDER' => 'Task Calender',
-    '' => '',
+    'DEPARTMENTS_ERROR' => 'Each department may only be selected once.',
     '' => '',
     '' => '',
     '' => '',

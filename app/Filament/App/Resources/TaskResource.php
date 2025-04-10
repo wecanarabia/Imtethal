@@ -197,7 +197,7 @@ class TaskResource extends Resource implements HasShieldPermissions
                     ->relationship('incompletedDeliveries')
                     ->label(__('views.NEXT_DELIVERY'))
                     ->required()
-                    ->deletable(false)
+                    ->deletable(true)
                     ->addable(false)
                     ->visible(function($operation, Forms\Get $get, $record) {
                         return $operation == "edit"&& $get('task_type') == TaskTypeEnum::RECURRING->value;

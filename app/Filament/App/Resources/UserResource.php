@@ -14,6 +14,7 @@ use App\Enums\DepartmentRoleEnum;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Repeater;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Validation\ValidationException;
 use App\Filament\App\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\App\Resources\UserResource\RelationManagers;
@@ -154,25 +155,40 @@ class UserResource extends Resource implements HasShieldPermissions
                 ->label(__('views.JOB_TITLE'))
                 ->maxLength(255)
                 ->required(),
-            $panel != 'admin'?
-            Repeater::make('departments')
-                ->label(__('views.DEPARTMENTS'))
-                ->relationship('departments')
-                ->columns(2)
-                ->collapsible()
-                ->columnSpanFull()
-                ->schema([
-                    Select::make('department_id')
-                        ->label(__('views.DEPARTMENT'))
-                        ->columnSpan(1)
-                        ->options(\App\Models\Department::query()->where('company_id', Filament::getTenant()->id)->pluck('name', 'id')->toArray())
-                        ->required(),
-                    Select::make('department_role')
-                        ->label(__('views.DEPARTMENT_ROLE'))
-                        ->columnSpan(1)     
-                        ->options(DepartmentRoleEnum::labels())         
-                        ->required(),   
-                ])
+        $panel != 'admin'?
+        Repeater::make('departments')
+            ->label(__('views.DEPARTMENTS'))
+            ->columns(2)
+            ->collapsible()
+            ->rules(function (array $state) {
+                $departmentIds = array_column($state, 'department_id');
+                $duplicates = array_diff_key($departmentIds, array_unique($departmentIds));
+ return function (string $attribute, $value, $fail) use ($duplicates) {
+                if (count($duplicates)) {
+                    $fail(
+                        __('views.DEPARTMENTS_ERROR'),
+                    );
+                }
+            };
+            })
+            ->columnSpanFull()
+            ->schema([
+                Select::make('department_id')
+                    ->label(__('views.DEPARTMENT'))
+                    ->options(
+                        \App\Models\Department::query()
+                            ->where('company_id', Filament::getTenant()->id)
+                            ->pluck('name', 'id')
+                            ->toArray()
+                    )
+                    ->required()
+                    ->columnSpan(1),
+                Select::make('department_role')
+                    ->label(__('views.DEPARTMENT_ROLE'))
+                    ->options(DepartmentRoleEnum::labels())
+                    ->required()
+                    ->columnSpan(1),
+            ])
             :''
         ];
     }

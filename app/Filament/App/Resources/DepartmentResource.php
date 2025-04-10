@@ -49,6 +49,7 @@ class DepartmentResource extends Resource implements HasShieldPermissions
                 Forms\Components\TextInput::make('name')
                     ->maxLength(255)
                     ->label(__('views.NAME'))
+                    ->columnSpanFull()
                     ->required(),
                 Forms\Components\Textarea::make('description')
                     ->label(__('views.DESCRIPTION'))

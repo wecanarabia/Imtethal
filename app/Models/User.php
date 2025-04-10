@@ -85,8 +85,10 @@ class User extends Authenticatable implements HasTenants, FilamentUser, HasAvata
         return $this->team()->whereKey($tenant)->exists();
     }
 
-    public function departments(): BelongsToMany
-    {
-        return $this->BelongsToMany(Department::class, 'department_employee', 'employee_id', 'department_id');
-    }
+public function departments()
+{
+    return $this->belongsToMany(Department::class, 'department_employee', 'employee_id', 'department_id')
+        ->withPivot('department_role')
+        ->withTimestamps();
+}
 }

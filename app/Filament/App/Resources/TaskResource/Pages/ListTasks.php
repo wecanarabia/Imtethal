@@ -15,9 +15,10 @@ class ListTasks extends ListRecords
         return [
             Actions\Action::make('calender')
                 ->label(__('views.CALENDER'))
+                ->color('success')
                 ->url(static::$resource::getUrl('calender'))
                 ->icon('heroicon-m-calendar'),
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()->color('success'),
         ];
     }
 }

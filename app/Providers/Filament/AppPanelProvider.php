@@ -7,8 +7,10 @@ use Filament\Panel;
 use Filament\Widgets;
 use App\Models\Company;
 use Filament\PanelProvider;
+use Filament\Facades\Filament;
 use Filament\Navigation\MenuItem;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -47,6 +49,7 @@ class AppPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
+            ->brandLogo(fn () => view('components.custom.logo-title'))
             ->tenant(Company::class, 'slug', 'team')
             ->tenantMenu(false)
             ->tenantMiddleware([
@@ -65,6 +68,7 @@ class AppPanelProvider extends PanelProvider
             ->widgets([
 
             ])
+            // ->viteTheme('resources/css/filament.css')
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -80,4 +84,14 @@ class AppPanelProvider extends PanelProvider
                 Authenticate::class,
             ]);
     }
+/* 
+    public function boot()
+    {
+        Filament::registerRenderHook(
+            PanelsRenderHook::TOPBAR_START,
+            fn(Panel $panel) => view('components.custom.logo-title', [
+                'title' => config('app.company_name'),
+            ])->render()
+        );
+    } */
 }
