@@ -15,6 +15,27 @@ class Company extends Model
         'delay_delivery_points',
     ];
 
+    protected $appends = [
+        'completed_task_points',
+        'delayed_task_points',
+        'grace_period_task_points',
+    ];
+
+    public function getCompletedTaskPointsAttribute()
+    {
+        return 10;
+    }
+
+    public function getDelayedTaskPointsAttribute()
+    {
+        return 5;
+    }
+
+    public function getGracePeriodTaskPointsAttribute()
+    {
+        return 0;
+    }
+
     public function employees()
     {
         return $this->hasMany(User::class);

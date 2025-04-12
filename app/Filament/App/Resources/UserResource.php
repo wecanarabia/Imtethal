@@ -155,15 +155,23 @@ class UserResource extends Resource implements HasShieldPermissions
                 ->label(__('views.JOB_TITLE'))
                 ->maxLength(255)
                 ->required(),
-        $panel != 'admin'?
+          Forms\Components\TextInput::make('performance_evaluation')
+            ->label(__('views.PERFORMANCE_EVALUATION'))
+            ->visible(function ($operation)  {
+                return $operation != 'view';
+            }),
+
         Repeater::make('departments')
+            ->visible(function ()use($panel){
+                return $panel != 'admin'||$panel == null;
+            })
             ->label(__('views.DEPARTMENTS'))
             ->columns(2)
             ->collapsible()
             ->rules(function (array $state) {
                 $departmentIds = array_column($state, 'department_id');
                 $duplicates = array_diff_key($departmentIds, array_unique($departmentIds));
- return function (string $attribute, $value, $fail) use ($duplicates) {
+                return function (string $attribute, $value, $fail) use ($duplicates) {
                 if (count($duplicates)) {
                     $fail(
                         __('views.DEPARTMENTS_ERROR'),
@@ -177,7 +185,7 @@ class UserResource extends Resource implements HasShieldPermissions
                     ->label(__('views.DEPARTMENT'))
                     ->options(
                         \App\Models\Department::query()
-                            ->where('company_id', Filament::getTenant()->id)
+                            ->where('company_id', Filament::getTenant()?->id)
                             ->pluck('name', 'id')
                             ->toArray()
                     )
@@ -188,8 +196,7 @@ class UserResource extends Resource implements HasShieldPermissions
                     ->options(DepartmentRoleEnum::labels())
                     ->required()
                     ->columnSpan(1),
-            ])
-            :''
+            ]),
         ];
     }
 }
