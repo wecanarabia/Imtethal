@@ -13,4 +13,10 @@ class Helper
             $rating >= 0  && $rating <= 49  => __('views.POOR'),
         };
     }
+
+    public static function getRecordId()
+    {
+        $url = Request()->route()->parameters()['id'];
+        return $url;
+    }
 }

@@ -119,7 +119,7 @@ class TaskResource extends Resource implements HasShieldPermissions
                             ->preload()
                             ->options(function(Forms\Get $get) {
                                 $data = match ($get('assigneeable_type')) {
-                                    User::class => User::where('company_id', Filament::getTenant()->id)->pluck('name', 'id'),
+                                    User::class => User::where('company_id', Filament::getTenant()->id)->where('id', '!=', auth()->user()->id)->pluck('name', 'id'),
                                     Department::class => Department::where('company_id', Filament::getTenant()->id)->pluck('name', 'id'),
                                     default => [],
                                 };

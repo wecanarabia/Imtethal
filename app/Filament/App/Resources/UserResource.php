@@ -2,6 +2,7 @@
 
 namespace App\Filament\App\Resources;
 
+use Closure;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
@@ -9,10 +10,13 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Enums\UserTypeEnum;
 use Filament\Facades\Filament;
+use Illuminate\Validation\Rule;
 use Filament\Resources\Resource;
 use App\Enums\DepartmentRoleEnum;
+use Illuminate\Support\Facades\DB;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Repeater;
+use Illuminate\Validation\Rules\Unique;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Validation\ValidationException;
 use App\Filament\App\Resources\UserResource\Pages;
@@ -195,6 +199,19 @@ class UserResource extends Resource implements HasShieldPermissions
                     ->label(__('views.DEPARTMENT_ROLE'))
                     ->options(DepartmentRoleEnum::labels())
                     ->required()
+                    ->rules([
+                        fn (Forms\Get $get): Closure => function (string $attribute, $value, Closure $fail) use ($get) {
+                            $departmentId = $get('department_id');
+                            $departmentRole = $value;
+                            $role = DB::table('department_employee')
+                                ->where('department_id', $departmentId)
+                                ->where('department_role', DepartmentRoleEnum::HEAD_OF_DEPARTMENT->value)
+                                ->exists();
+                            if ($role) {
+                                $fail(__('views.HEAD_OF_DEPARTMENT_ROLE_ERROR'));
+                            }
+                        },
+                    ])
                     ->columnSpan(1),
             ]),
         ];

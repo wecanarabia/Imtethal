@@ -26,4 +26,9 @@ class Department extends Model
     {
         return $this->BelongsToMany(User::class, 'department_employee', 'department_id','employee_id');
     }
+
+    public function assignees()
+    {
+        return $this->morphMany(Assignee::class, 'assigneeable');
+    }
 }

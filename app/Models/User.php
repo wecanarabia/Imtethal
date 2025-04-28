@@ -113,4 +113,9 @@ class User extends Authenticatable implements HasTenants, FilamentUser, HasAvata
             ->withPivot('department_role')
             ->withTimestamps();
     }
+
+    public function assignees()
+    {
+        return $this->morphMany(Assignee::class, 'assigneeable');
+    }
 }
