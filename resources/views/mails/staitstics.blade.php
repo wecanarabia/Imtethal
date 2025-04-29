@@ -1,4 +1,4 @@
-<x-mail-layout.mail>
+<x-mail-layout.mail-app>
     <div class="max-w-2xl mx-auto my-8 bg-white rounded-lg shadow-sm">
         <!-- Header -->
         <div class="px-6 py-4 border-b border-gray-200">
@@ -32,4 +32,4 @@
             </p>
         </div>
     </div>
-</x-mail-layout.mail>
+</x-mail-layout.mail-app>

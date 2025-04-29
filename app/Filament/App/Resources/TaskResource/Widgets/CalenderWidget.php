@@ -97,20 +97,62 @@ class CalenderWidget extends FullCalendarWidget
                                     $justification = $this->newJustification($record, $assignee->id);
                                 }
                             }
+                            $msg['link'] = url(Justification::getUrl(parameters: ['id' => $justification->id], panel: 'justification'));
                             $data['name'] = $user->name;
                             $data['subject'] = __("views.INCOMPLETE_TASK_SUBJECT");
                             $data['email'] = $user->email;
                             $data['phone'] = $user->phone;
-                            $data['msg'] = __("views.INCOMPLETE_TASK_GREETING", ['employee_name' => $user->name]) . "\n\n" .
-                                __("views.INCOMPLETE_TASK_BODY_1") . "\n\n" .
-                                __("views.INCOMPLETE_TASK_BODY_2") . "\n\n" .
-                                __("views.INCOMPLETE_TASK_ACTION") . "\n\n" .
-                                __("views.INCOMPLETE_TASK_LINK", ['justification_link' => url(Justification::getUrl(parameters: ['id' => $justification->id], panel: 'justification'))]) . "\n\n" .
-                                __("views.INCOMPLETE_TASK_BODY_3") . "\n\n" .
-                                __("views.INCOMPLETE_TASK_DEADLINE", ['deadline' => '48']) . "\n\n" .
-                                __("views.INCOMPLETE_TASK_THANKS") . "\n" .
-                                __("views.INCOMPLETE_TASK_SIGNATURE") . "\n" .
-                                __("views.EIMTITHAL");
+                            $msg['greeting'] = __('views.INCOMPLETE_TASK_GREETING', ['employee_name' => $user->name]);
+                            $msg['body1'] = __('views.INCOMPLETE_TASK_BODY_1');
+                            $msg['body2'] = __('views.INCOMPLETE_TASK_BODY_2');
+                            $msg['action'] = __('views.INCOMPLETE_TASK_ACTION');
+                            $msg['body3'] = __('views.INCOMPLETE_TASK_BODY_3');
+                            $msg['deadline'] = __('views.INCOMPLETE_TASK_DEADLINE');
+                            $msg['thanks'] = __('views.INCOMPLETE_TASK_THANKS');
+                            $msg['signature'] = __('views.INCOMPLETE_TASK_SIGNATURE');
+                            $msg['eimtithal'] = __('views.EIMTITHAL');
+                            $data['msg'] = $msg['greeting'] . "\n\n" .
+                                $msg['body1'] . "\n\n" .
+                                $msg['body2'] . "\n\n" .
+                                $msg['action'] . "\n\n" .
+                                $msg['link'] . "\n\n" .
+                                $msg['body3'] . "\n\n" .
+                                $msg['deadline'] . "\n\n" .
+                                $msg['thanks'] . "\n" .
+                                $msg['signature'] . "\n" .
+                                $msg['eimtithal'];
+                                $data['view'] = 'mails.justification';
+                                $data['html_msg'] = $msg;
+                                /* $data['body'] = \Illuminate\Support\Facades\View::make('mails.justification', [
+                                    'data' => $msg,
+                                ])->render(); */
+
+/* $data['html_msg'] ='<div style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.6; color: #333;">
+        <p>'.$msg['greeting'].'</p>
+         <p>'.$msg['body1'].'</p>
+        <p>'.$msg['body2'].'</p>
+        <p>'.$msg['action'].'</p>
+        <p><a href="'.$msg['link'].'" style="color: #1a73e8;">'.$msg['link'].'</a></p>
+        <p>'.$msg['body3'].'</p>
+        <p>'.$msg['deadline'].'</p>
+        <p>'.$msg['thanks'].'</p>
+        <p>'.$msg['signature'].'</p>
+        <p>'.$msg['eimtithal'].'</p> 
+        
+        </div>'  <<<HTML
+<p>'.$thanks.'<br />'.$signature.'<br />'.$eimtithal.'</p>
+<div style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.6; color: #333;">
+    <p>{$greeting}</p>
+    <p>{$body1}</p>
+    <p>{$body2}</p>
+    <p>{$action}</p>
+    <p><a href="{$link}" style="color: #1a73e8;">{$link}</a></p>
+    <p>{$body3}</p>
+    <p>{$deadline}</p>
+    <p>{$thanks}<br>{$signature}<br>{$eimtithal}</p>
+</div>
+HTML ;*/
+                            
                             switch (Filament::getTenant()->notification_type) {
                                 case 'email':
                                     $smsService = new SendService(new EmailStrategy());
