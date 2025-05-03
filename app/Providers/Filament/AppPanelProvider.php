@@ -47,7 +47,7 @@ class AppPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\\Filament\\App\\Resources')
             ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\\Filament\\App\\Pages')
             ->pages([
-                Pages\Dashboard::class,
+                \App\Filament\App\Pages\Dashboard::class,
             ])
             ->brandLogo(fn () => view('components.custom.logo-title'))
             ->tenant(Company::class, 'slug', 'team')
@@ -84,7 +84,7 @@ class AppPanelProvider extends PanelProvider
                 Authenticate::class,
             ]);
     }
-/* 
+/*
     public function boot()
     {
         Filament::registerRenderHook(

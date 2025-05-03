@@ -86,7 +86,7 @@ class CalenderWidget extends FullCalendarWidget
                     \Filament\Actions\Action::make('incomplete')
                         ->color('info')
                         ->label(__('views.INCOMPLETE'))
-                        ->visible(fn () => $record->status != TaskStatusEnum::COMPLETED->value/* &&$record->justifications()->count() == 0 */)
+                        ->visible(fn () => $record->status != TaskStatusEnum::COMPLETED->value&&$record->justifications()->count() == 0)
                         ->action(function () use ($record) {
                             foreach ($record->task->assignees as $assignee) {
                                 if ($assignee->assigneeable_type == User::class) {
@@ -123,35 +123,6 @@ class CalenderWidget extends FullCalendarWidget
                                 $msg['eimtithal'];
                                 $data['view'] = 'mails.justification';
                                 $data['html_msg'] = $msg;
-                                /* $data['body'] = \Illuminate\Support\Facades\View::make('mails.justification', [
-                                    'data' => $msg,
-                                ])->render(); */
-
-/* $data['html_msg'] ='<div style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.6; color: #333;">
-        <p>'.$msg['greeting'].'</p>
-         <p>'.$msg['body1'].'</p>
-        <p>'.$msg['body2'].'</p>
-        <p>'.$msg['action'].'</p>
-        <p><a href="'.$msg['link'].'" style="color: #1a73e8;">'.$msg['link'].'</a></p>
-        <p>'.$msg['body3'].'</p>
-        <p>'.$msg['deadline'].'</p>
-        <p>'.$msg['thanks'].'</p>
-        <p>'.$msg['signature'].'</p>
-        <p>'.$msg['eimtithal'].'</p> 
-        
-        </div>'  <<<HTML
-<p>'.$thanks.'<br />'.$signature.'<br />'.$eimtithal.'</p>
-<div style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.6; color: #333;">
-    <p>{$greeting}</p>
-    <p>{$body1}</p>
-    <p>{$body2}</p>
-    <p>{$action}</p>
-    <p><a href="{$link}" style="color: #1a73e8;">{$link}</a></p>
-    <p>{$body3}</p>
-    <p>{$deadline}</p>
-    <p>{$thanks}<br>{$signature}<br>{$eimtithal}</p>
-</div>
-HTML ;*/
                             
                             switch (Filament::getTenant()->notification_type) {
                                 case 'email':
@@ -167,8 +138,8 @@ HTML ;*/
                                 case 'both':
                                     $mailService = new SendService(new EmailStrategy());
                                     $mailService->sendMsg($data);
-                                    // $smsService = new SendService(new UnformalWhatsappStrategy());
-                                    // $smsService->sendMsg($data);
+                                    $smsService = new SendService(new UnformalWhatsappStrategy());
+                                    $smsService->sendMsg($data);
                                     $done = 1;
                                     break;
                                 default:
