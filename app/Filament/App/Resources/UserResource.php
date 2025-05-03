@@ -162,12 +162,12 @@ class UserResource extends Resource implements HasShieldPermissions
           Forms\Components\TextInput::make('performance_evaluation')
             ->label(__('views.PERFORMANCE_EVALUATION'))
             ->visible(function ($operation)  {
-                return $operation != 'view';
+                return $operation == 'view';
             }),
 
         Repeater::make('departments')
-            ->visible(function ()use($panel){
-                return $panel != 'admin'||$panel == null;
+            ->visible(function ($operation)use($panel){
+                return $panel != 'admin'||$panel == null||$operation != 'view';
             })
             ->label(__('views.DEPARTMENTS'))
             ->columns(2)
@@ -205,9 +205,11 @@ class UserResource extends Resource implements HasShieldPermissions
                             $departmentRole = $value;
                             $role = DB::table('department_employee')
                                 ->where('department_id', $departmentId)
-                                ->where('department_role', DepartmentRoleEnum::HEAD_OF_DEPARTMENT->value)
+                                ->when($value==DepartmentRoleEnum::HEAD_OF_DEPARTMENT->value, function ($query) {
+                                    return $query->where('department_role', DepartmentRoleEnum::HEAD_OF_DEPARTMENT->value);
+                                })
                                 ->exists();
-                            if ($role) {
+                            if ($role&&$departmentRole==DepartmentRoleEnum::HEAD_OF_DEPARTMENT->value) {
                                 $fail(__('views.HEAD_OF_DEPARTMENT_ROLE_ERROR'));
                             }
                         },
