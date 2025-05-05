@@ -84,8 +84,8 @@ class AppPanelProvider extends PanelProvider
                 Authenticate::class,
             ]);
     }
-/*
-    public function boot()
+
+/*     public function boot()
     {
         Filament::registerRenderHook(
             PanelsRenderHook::TOPBAR_START,
@@ -93,5 +93,5 @@ class AppPanelProvider extends PanelProvider
                 'title' => config('app.company_name'),
             ])->render()
         );
-    } */
+    }  */
 }
