@@ -36,7 +36,11 @@ class PunishmentResource extends Resource
                 Forms\Components\TextInput::make('assignee.name')
                     ->label(__('views.ASSIGNEE'))
                     ->diasabled(),
+                Forms\Components\Textarea::make('taskDelivery.task.delay_punishment')
+                    ->label(__('views.PUNISHMENT'))
+                    ->diasabled(),
                 Forms\Components\Textarea::make('note')
+                    ->label(__('views.NOTE'))
                     ->columnSpanFull(),
                 Repeater::make('files')
                     ->relationship('files')
@@ -59,6 +63,7 @@ class PunishmentResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('taskDelivery.task.name')
                     ->numeric()
+                    ->label(__('views.TASK'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('assignee.name')
                     ->label(__('views.ASSIGNEE')),
