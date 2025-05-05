@@ -28,4 +28,9 @@ class TaskDelivery extends Model
     {
         return $this->hasMany(Justification::class);
     }
+
+    public function punishments()
+    {
+        return $this->hasMany(Punishment::class);
+    }
 }

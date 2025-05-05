@@ -5,48 +5,51 @@ namespace App\Filament\App\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
+use App\Models\Punishment;
 use Filament\Tables\Table;
-use App\Models\Justification;
 use Filament\Resources\Resource;
-use App\Enums\JustificationStatusEnum;
+use Filament\Forms\Components\Repeater;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\App\Resources\JustificationResource\Pages;
-use App\Filament\App\Resources\JustificationResource\RelationManagers;
+use App\Filament\App\Resources\PunishmentResource\Pages;
+use App\Filament\App\Resources\PunishmentResource\RelationManagers;
 
-class JustificationResource extends Resource
+class PunishmentResource extends Resource
 {
-    protected static ?string $model = Justification::class;
+    protected static ?string $model = Punishment::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function getPluralLabel(): string
     {
-        return trans('views.JUSTIFICATIONS');
+        return trans('views.PUNISHMENTS');
     }
 
     public static function getLabel(): string
     {
-        return trans('views.JUSTIFICATION');
+        return trans('views.PUNISHMENT');
     }
-
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-
                 Forms\Components\TextInput::make('assignee.name')
-                    ->disabled()
-                    ->required(),
+                    ->label(__('views.ASSIGNEE'))
+                    ->diasabled(),
                 Forms\Components\Textarea::make('note')
                     ->columnSpanFull(),
-                Forms\Components\Textarea::make('reply')
-                    ->disabled()
-                    ->columnSpanFull(),
-                Forms\Components\Select::make('status')
-                    ->label(__('views.STATUS'))
-                    ->options(JustificationStatusEnum::labels())
-                    ->required(),
+                Repeater::make('files')
+                    ->relationship('files')
+                    ->label(__('views.FILES'))
+                    ->addActionLabel(__('views.ADD_FILE'))
+                    ->nullable()
+                    ->columnSpanFull()
+                    ->collapsible()
+                    ->default([])
+                    ->schema([
+                        Static::fileInput(config('constants.TASK_FILE_DIR'))
+                            ->required(),
+                    ]),
             ]);
     }
 
@@ -55,20 +58,14 @@ class JustificationResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('taskDelivery.task.name')
-                    ->label(__('views.TASK'))
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('assignee.name')
-                    ->label(__('views.ASSIGNEE'))
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('status')
-                    ->formatStateUsing(fn ($state) => JustificationStatusEnum::tryFrom($state)?->getLabel() ?? $state)
-                    ->label(__('views.STATUS')),
+                    ->label(__('views.ASSIGNEE')),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->label(__('views.CREATED_AT'))
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
             ])
             ->filters([
                 //
@@ -94,9 +91,9 @@ class JustificationResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListJustifications::route('/'),
-            'view' => Pages\ViewJustification::route('/{record}'),
-            'edit' => Pages\EditJustification::route('/{record}/edit'),
+            'index' => Pages\ListPunishments::route('/'),
+            'view' => Pages\ViewPunishment::route('/{record}'),
+            'edit' => Pages\EditPunishment::route('/{record}/edit'),
         ];
     }
 }

@@ -154,8 +154,13 @@ class CalenderWidget extends FullCalendarWidget
 
     public function newJustification($record, $user_id)
     {
+        $punishment = $record->punishments()->create([
+            'assignee_id'=> $user_id,
+            'company_id' => Filament::getTenant()->id
+        ]);
         return $record->justifications()->create([
             'assignee_id'=> $user_id,
+            'punishment_id' => $punishment->id,
             'company_id' => Filament::getTenant()->id
         ]);
     }
