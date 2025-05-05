@@ -27,7 +27,15 @@ class RoleResource extends Resource implements HasShieldPermissions
 
     public static ?string $tenantOwnershipRelationshipName = 'team';
 
+    public static function getPluralLabel(): string
+    {
+        return trans('views.TASK_DELIVERIES');
+    }
 
+    public static function getLabel(): string
+    {
+        return trans('views.TASK_DELIVERY');
+    }
     public static function getPermissionPrefixes(): array
     {
         return [

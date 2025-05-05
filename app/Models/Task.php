@@ -3,10 +3,21 @@
 namespace App\Models;
 
 use App\Enums\TaskStatusEnum;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Task extends Model
 {
+    use LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logExcept([]);
+    }
+    protected static $logOnlyDirty = true;
+
     protected $fillable = [
         'name',
         'description',

@@ -2,13 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Justification extends Model
 {
     use HasUuids;
+    use LogsActivity;
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logExcept([]);
+    }
+    protected static $logOnlyDirty = true;
     protected $table = 'justifications';
     public $incrementing = false;
     protected $fillable = [

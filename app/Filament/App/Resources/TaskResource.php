@@ -293,6 +293,11 @@ class TaskResource extends Resource implements HasShieldPermissions
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('activities')
+                ->label(__('views.LOGS'))
+                ->icon('heroicon-o-list-bullet')
+                ->url(fn ($record) => Static::getUrl('activities', ['record' => $record]))
+
             ])
             ->headerActions([
 
@@ -318,6 +323,7 @@ class TaskResource extends Resource implements HasShieldPermissions
             'calender' => Pages\TaskCalender::route('/calender'),
             'create' => Pages\CreateTask::route('/create'),
             'view' => Pages\ViewTask::route('/{record}'),
+            'activities' => Pages\ListTaskActivities::route('/{record}/activites'),
             'edit' => Pages\EditTask::route('/{record}/edit'),
 
         ];

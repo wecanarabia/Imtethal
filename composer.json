@@ -13,6 +13,7 @@
         "joaopaulolndev/filament-edit-profile": "^1.0",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
+        "pxlrbt/filament-activity-log": "^1.1",
         "saade/filament-fullcalendar": "^3.2"
     },
     "require-dev": {

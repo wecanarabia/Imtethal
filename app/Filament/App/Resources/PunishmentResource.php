@@ -73,11 +73,11 @@ class PunishmentResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\Action::make('activities')
+                    ->label(__('views.LOGS'))
+                    ->icon('heroicon-o-list-bullet')
+                    ->url(fn ($record) => Static::getUrl('activities', ['record' => $record]))
+
             ]);
     }
 
@@ -93,6 +93,7 @@ class PunishmentResource extends Resource
         return [
             'index' => Pages\ListPunishments::route('/'),
             'view' => Pages\ViewPunishment::route('/{record}'),
+            'activities' => Pages\ListPunishmentsActivities::route('/{record}/activities'),
             'edit' => Pages\EditPunishment::route('/{record}/edit'),
         ];
     }

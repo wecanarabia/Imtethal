@@ -76,11 +76,11 @@ class JustificationResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\Action::make('activities')
+                    ->label(__('views.LOGS'))
+                    ->icon('heroicon-o-list-bullet')
+                    ->url(fn ($record) => Static::getUrl('activities', ['record' => $record]))
+
             ]);
     }
 
@@ -96,6 +96,7 @@ class JustificationResource extends Resource
         return [
             'index' => Pages\ListJustifications::route('/'),
             'view' => Pages\ViewJustification::route('/{record}'),
+            'activities' => Pages\ListJustificationsActivities::route('/{record}/activities'),
             'edit' => Pages\EditJustification::route('/{record}/edit'),
         ];
     }
