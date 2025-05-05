@@ -2,12 +2,23 @@
 
 namespace App\Models;
 
+use Spatie\Activitylog\LogOptions;
 use Guava\Calendar\ValueObjects\Event;
 use Guava\Calendar\Contracts\Eventable;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class TaskDelivery extends Model
 {
+
+    use LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logExcept([]);
+    }
+    protected static $logOnlyDirty = true;
     protected $table = 'task_deliveries';
 
     protected $fillable = [

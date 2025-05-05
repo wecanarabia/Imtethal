@@ -162,24 +162,32 @@ class TaskResource extends Resource implements HasShieldPermissions
                     ]),
                 Repeater::make('deliveries')
                     ->relationship('deliveries')
-                    ->label(__('views.NEXT_DELIVERY'))
-                    ->required()
+                    ->label(function($operation, Forms\Get $get, $record) {
+                        return (($get('task_type') == TaskTypeEnum::RECURRING->value&&$operation=='create') || ($record->task_type == TaskTypeEnum::RECURRING->value&&$operation=='edit'))?__('views.NEXT_DELIVERY'):null;
+                    })
+                    ->required(function($operation, Forms\Get $get, $record) {
+                        return (($get('task_type') == TaskTypeEnum::RECURRING->value&&$operation=='create') || ($record->task_type == TaskTypeEnum::RECURRING->value&&$operation=='edit'));
+                    })
                     ->addable(false)
                     ->deletable(false)
                     ->visible(function($operation, Forms\Get $get, $record) {
-                        return ($get('task_type') == TaskTypeEnum::NONE_RECURRING->value);
+                        return (($get('task_type') == TaskTypeEnum::RECURRING->value&&$operation=='create') || ($record->task_type == TaskTypeEnum::RECURRING->value&&$operation=='edit'));
                     })
                     ->columnSpanFull()
                     ->columns(2)
                     ->schema([
                         Forms\Components\DateTimePicker::make('delivery_time')
-                            ->required()
-                            ->label(__('views.DELIVERY_TIME')),
+                        ->required(function($operation, Forms\Get $get, $record) {
+                            return ($get('task_type') == TaskTypeEnum::RECURRING->value || $record->task_type == TaskTypeEnum::RECURRING->value);
+                        })
+                        ->label(__('views.DELIVERY_TIME')),
                         Forms\Components\DateTimePicker::make('grace_end_time')
                             ->required()
                             ->label(__('views.GRACE_END_TIME')),
                         Forms\Components\TextInput::make('task_evaluation')
-                            ->required()
+                            ->required(function($operation, Forms\Get $get, $record) {
+                                return ($get('task_type') == TaskTypeEnum::RECURRING->value || $record->task_type == TaskTypeEnum::RECURRING->value);
+                            })
                             ->label(__('views.TASK_EVALUATION'))
                             ->numeric()
                             ->default(0),
@@ -187,7 +195,9 @@ class TaskResource extends Resource implements HasShieldPermissions
                             ->label(__('views.STATUS'))
                             ->options(TaskStatusEnum::labels())
                             ->default(TaskStatusEnum::PENDING->value)
-                            ->required(),
+                            ->required(function($operation, Forms\Get $get, $record) {
+                                return ($get('task_type') == TaskTypeEnum::RECURRING->value || $record->task_type == TaskTypeEnum::RECURRING->value);
+                            }),
                         Forms\Components\Select::make('delivery_status')
                             ->nullable()
                             ->label(__('views.DELIVERY_STATUS'))
@@ -196,7 +206,9 @@ class TaskResource extends Resource implements HasShieldPermissions
                 Repeater::make('incompletedDeliveries')
                     ->relationship('incompletedDeliveries')
                     ->label(__('views.NEXT_DELIVERY'))
-                    ->required()
+                    ->required(function($operation, Forms\Get $get, $record) {
+                        return $operation == "edit"&& $get('task_type') == TaskTypeEnum::RECURRING->value;
+                    })
                     ->deletable(true)
                     ->addable(false)
                     ->visible(function($operation, Forms\Get $get, $record) {

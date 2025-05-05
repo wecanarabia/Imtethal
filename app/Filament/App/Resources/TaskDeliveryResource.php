@@ -31,7 +31,7 @@ class TaskDeliveryResource extends Resource
 
     public static function getLabel(): string
     {
-        return trans('views.TASK_DELIVERY ');
+        return trans('views.TASK_DELIVERY');
     }
 
     public static function form(Form $form): Form
@@ -67,29 +67,32 @@ class TaskDeliveryResource extends Resource
         return $table
             ->query(TaskDelivery::query()->whereIn('task_id', $tasks))
             ->columns([
-                Tables\Columns\TextColumn::make('task_id')
+                Tables\Columns\TextColumn::make('task.name')
+                    ->label(__('views.TASK'))
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('delivery_status')
+                    ->label(__('views.DELIVERY_STATUS'))
                     ->formatStateUsing(fn ($state) => DeliveryStatusEnum::tryFrom($state)?->getLabel() ?? $state)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('delivery_time')
+                    ->label(__('views.DELIVERY_TIME'))
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('grace_end_time')
+                    ->label(__('views.GRACE_END_TIME'))
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('task_evaluation')
+                    ->label(__('views.TASK_EVALUATION'))
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
+                    ->label(__('views.STATUS'))
                     ->formatStateUsing(fn ($state) => TaskStatusEnum::tryFrom($state)?->getLabel() ?? $state)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                    ->label(__('views.CREATED_AT'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
