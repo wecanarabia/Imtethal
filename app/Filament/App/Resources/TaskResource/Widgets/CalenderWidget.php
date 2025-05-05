@@ -123,7 +123,7 @@ class CalenderWidget extends FullCalendarWidget
                                 $msg['eimtithal'];
                                 $data['view'] = 'mails.justification';
                                 $data['html_msg'] = $msg;
-                            
+
                             switch (Filament::getTenant()->notification_type) {
                                 case 'email':
                                     $smsService = new SendService(new EmailStrategy());
@@ -156,6 +156,7 @@ class CalenderWidget extends FullCalendarWidget
     {
         return $record->justifications()->create([
             'assignee_id'=> $user_id,
+            'company_id' => Filament::getTenant()->id
         ]);
     }
     /* public function config(): array

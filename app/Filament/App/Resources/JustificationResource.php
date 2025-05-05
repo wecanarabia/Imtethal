@@ -95,7 +95,6 @@ class JustificationResource extends Resource
     {
         return [
             'index' => Pages\ListJustifications::route('/'),
-            'create' => Pages\CreateJustification::route('/create'),
             'view' => Pages\ViewJustification::route('/{record}'),
             'edit' => Pages\EditJustification::route('/{record}/edit'),
         ];

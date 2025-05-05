@@ -2,6 +2,8 @@
 
 namespace App\Enums;
 
+use Filament\Support\Contracts\HasLabel;
+
 enum JustificationStatusEnum:string implements HasLabel
 {
     case PENDING = 'pending';

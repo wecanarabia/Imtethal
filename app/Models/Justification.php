@@ -33,4 +33,8 @@ class Justification extends Model
         return $this->morphMany(File::class, 'fileable');
     }
 
+    public function team()
+    {
+        return $this->belongsTo(Company::class, 'company_id');
+    }
 }
